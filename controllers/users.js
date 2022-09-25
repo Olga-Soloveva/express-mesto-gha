@@ -17,12 +17,20 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUser = (req, res) => {
   User.findById(req.params.userId)
-    .then((user) => res.send(user))
-    .catch((err) => {
-      if (err.name === "CastError") {
+    .then((user) => {
+      if (!user) {
         return res.status(NOT_FOUND_CODE).send({
           message: "Запрашиваемый пользователь не найден",
         });
+      }
+      return res.send(user);
+    })
+    .catch((err) => {
+      if (err.name === "CastError") {
+        console.log(err.name);
+        return res
+          .status(NOT_FOUND_CODE)
+          .send({ message: "Запрашиваемый ресурс не найден" });
       } else {
         return res
           .status(SERVER_ERROR_CODE)
@@ -91,9 +99,9 @@ module.exports.updateAvatar = (req, res) => {
       upsert: true,
     }
   )
-    .then((user) => res.send( user ))
+    .then((user) => res.send(user))
     .catch((err) => {
-      console.log(err.name)
+      console.log(err.name);
       if (err.name === "ValidationError") {
         return res.status(BAD_REQUEST_CODE).send({
           message: "Переданы некорректные данные при обновлении аватара",
