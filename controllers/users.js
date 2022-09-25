@@ -29,7 +29,7 @@ module.exports.getUser = (req, res) => {
       if (err.name === "CastError") {
         console.log(err.name);
         return res
-          .status(NOT_FOUND_CODE)
+          .status(BAD_REQUEST_CODE)
           .send({ message: "Запрашиваемый ресурс не найден" });
       } else {
         return res
