@@ -25,7 +25,7 @@ module.exports.getUser = (req, res) => {
       if (err.name === 'CastError') {
         return res
           .status(BAD_REQUEST_CODE)
-          .send({ message: 'Запрашиваемый ресурс не найден' });
+          .send({ message: 'Передан некорректный id пользователя' });
       }
       return res.status(SERVER_ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
     });
@@ -55,18 +55,20 @@ module.exports.updateUser = (req, res) => {
     {
       new: true,
       runValidators: true,
-      upsert: true,
     },
   )
-    .then((user) => res.send(user))
+    .then((user) => {
+      if (!user) {
+        return res.status(NOT_FOUND_CODE).send({
+          message: 'Запрашиваемый пользователь не найден',
+        });
+      }
+      return res.send(user);
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(BAD_REQUEST_CODE).send({
           message: 'Переданы некорректные данные при обновлении профиля',
-        });
-      } if (err.name === 'CastError') {
-        return res.status(NOT_FOUND_CODE).send({
-          message: 'Запрашиваемый пользователь не найден',
         });
       }
       return res.status(SERVER_ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
@@ -82,18 +84,20 @@ module.exports.updateAvatar = (req, res) => {
     {
       new: true,
       runValidators: true,
-      upsert: true,
     },
   )
-    .then((user) => res.send(user))
+    .then((user) => {
+      if (!user) {
+        return res.status(NOT_FOUND_CODE).send({
+          message: 'Запрашиваемый пользователь не найден',
+        });
+      }
+      return res.send(user);
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(BAD_REQUEST_CODE).send({
           message: 'Переданы некорректные данные при обновлении аватара',
-        });
-      } if (err.name === 'CastError') {
-        return res.status(NOT_FOUND_CODE).send({
-          message: 'Запрашиваемый пользователь не найден',
         });
       }
       return res.status(SERVER_ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
