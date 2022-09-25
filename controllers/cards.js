@@ -7,7 +7,6 @@ const {
 
 module.exports.getCards = (req, res) => {
   Card.find({})
-    .populate(['owner', 'likes'])
     .then((cards) => res.send(cards))
     .catch(() => res.status(SERVER_ERROR_CODE).send({ message: 'На сервере произошла ошибка' }));
 };
@@ -41,7 +40,7 @@ module.exports.deleteCard = (req, res) => {
       if (err.name === 'CastError') {
         return res
           .status(BAD_REQUEST_CODE)
-          .send({ message: 'Запрашиваемый ресурс не найден' });
+          .send({ message: 'Передан некорректный id карточки' });
       }
       return res.status(SERVER_ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
     });
