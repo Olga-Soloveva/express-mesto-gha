@@ -1,8 +1,10 @@
 const Card = require('../models/card');
+
 const {
   BAD_REQUEST_CODE,
   SERVER_ERROR_CODE,
   NOT_FOUND_CODE,
+  FORBIDDEN,
 } = require('../utils/constants');
 
 module.exports.getCards = (req, res) => {
@@ -32,6 +34,11 @@ module.exports.deleteCard = (req, res) => {
       if (!card) {
         return res.status(NOT_FOUND_CODE).send({
           message: 'Карточка с указанным id не найдена',
+        });
+      }
+      if (req.user._id !== card.owner) {
+        return res.status(FORBIDDEN).send({
+          message: 'Нет прав на удаление карточек других пользователей',
         });
       }
       return res.send(card);
