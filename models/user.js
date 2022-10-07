@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 6,
+      select: false,
     },
     name: {
       type: String,
@@ -27,7 +28,6 @@ const userSchema = new mongoose.Schema(
     },
     about: {
       type: String,
-      required: true,
       minlength: 2,
       maxlength: 30,
       default: 'Исследователь',
