@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { celebrate, Joi } = require('celebrate');
+const { errors } = require('celebrate');
+
 const { login, createUser } = require('./controllers/users');
 
 const userRouter = require('./routes/users');
@@ -42,6 +44,16 @@ app.use(auth);
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
 app.use('*', notFoundController);
+
+app.use(errors());
+
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res
+    .status(statusCode)
+    .send({ message: statusCode === 500 ? 'На сервере произошла ошибка' : message });
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
