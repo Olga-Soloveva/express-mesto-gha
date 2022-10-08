@@ -18,12 +18,12 @@ router.post('/', celebrate({
 }), createCard);
 router.delete('/:cardId', celebrate({
   body: Joi.object().keys({
-    _id: Joi.string().required().min(24).max(24),
+    cardId: Joi.string().alphanum().length(24),
   }),
 }), deleteCard);
 router.put('/:cardId/likes', celebrate({
   body: Joi.object().keys({
-    _id: Joi.string().required().min(24).max(24),
+    cardId: Joi.string().alphanum().length(24),
   }),
 }), likeCard);
 router.delete('/:cardId/likes', dislikeCard);
