@@ -49,7 +49,6 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   { new: true },
 )
   .populate(['owner', 'likes'])
-
   .then((card) => {
     if (!card) {
       next(new NotFoundError('Передан не существуюший id карточки'));
@@ -69,15 +68,17 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   { new: true },
 )
   .populate(['owner', 'likes'])
+
   .then((card) => {
     if (!card) {
       next(new NotFoundError('Передан не существуюший id карточки'));
+      return;
     }
-    return res.send(card);
+    res.send(card);
   })
   .catch((err) => {
     if (err.name === 'CastError') {
-      next(new BadRequestError('Переданы некорректные данные для снятия лайка'));
+      next(new BadRequestError('Переданы некорректные данные для постановки лайка'));
     }
     next(new ServerError('На сервере произошла ошибка'));
   });
