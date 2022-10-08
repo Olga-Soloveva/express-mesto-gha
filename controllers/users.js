@@ -84,7 +84,8 @@ module.exports.createUser = (req, res, next) => {
       avatar,
     }))
     .then((user) => {
-      // delete user.password;
+      // eslint-disable-next-line no-param-reassign
+      user.password = undefined;
       res.send(user);
     })
     .catch((err) => {
