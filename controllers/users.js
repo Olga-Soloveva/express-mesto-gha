@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
@@ -14,7 +15,7 @@ module.exports.login = (req, res, next) => {
   User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        next(new UnauthorizedError('Неправильные почта или пароль'));
+        throw new UnauthorizedError('Неправильные почта или пароль');
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
@@ -35,7 +36,7 @@ module.exports.login = (req, res, next) => {
       });
       return res.send({ message: 'Авторизация прошла успешно' });
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 module.exports.getUsers = (req, res, next) => {
@@ -55,14 +56,16 @@ module.exports.getUserById = (req, res, next) => {
     .then((user) => {
       if (!user) {
         next(new NotFoundError('Запрашиваемый пользователь не найден'));
+      } else {
+        return res.send(user);
       }
-      return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Передан некорректный id пользователя'));
+      } else {
+        next(new ServerError('На сервере произошла ошибка'));
       }
-      next(new ServerError('На сервере произошла ошибка'));
     });
 };
 
@@ -91,11 +94,11 @@ module.exports.createUser = (req, res, next) => {
     .catch((err) => {
       if (err.code === 11000) {
         next(new ConflictError('Пользователь с таким email уже существует'));
-      }
-      if (err.name === 'ValidationError') {
+      } else if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
+      } else {
+        next(new ServerError('На сервере произошла ошибка'));
       }
-      next(new ServerError('На сервере произошла ошибка'));
     });
 };
 
@@ -113,14 +116,16 @@ module.exports.updateUser = (req, res, next) => {
     .then((user) => {
       if (!user) {
         next(new NotFoundError('Запрашиваемый пользователь не найден'));
+      } else {
+        return res.send(user);
       }
-      return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
+      } else {
+        next(new ServerError('На сервере произошла ошибка'));
       }
-      next(new ServerError('На сервере произошла ошибка'));
     });
 };
 
@@ -138,13 +143,15 @@ module.exports.updateAvatar = (req, res, next) => {
     .then((user) => {
       if (!user) {
         next(new NotFoundError('Запрашиваемый пользователь не найден'));
+      } else {
+        return res.send(user);
       }
-      return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные при обновлении аватара'));
+      } else {
+        next(new ServerError('На сервере произошла ошибка'));
       }
-      next(new ServerError('На сервере произошла ошибка'));
     });
 };

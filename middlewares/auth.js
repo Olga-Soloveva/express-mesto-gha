@@ -7,6 +7,7 @@ module.exports = (req, res, next) => {
 
   if (!authorization) {
     next(new UnauthorizedError('Необходима авторизация'));
+    return;
   }
 
   const token = authorization.replace('Bearer ', '');
@@ -15,7 +16,7 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, 'some-secret-key');
   } catch (err) {
-    next(new UnauthorizedError('Необходима авторизация1'));
+    next(new UnauthorizedError('Необходима авторизация'));
   }
 
   req.user = payload;

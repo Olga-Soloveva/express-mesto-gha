@@ -2,8 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { celebrate, Joi } = require('celebrate');
-const { errors } = require('celebrate');
+const { celebrate, errors, Joi } = require('celebrate');
 
 const { login, createUser } = require('./controllers/users');
 
@@ -11,6 +10,7 @@ const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const { notFoundController } = require('./controllers/notFoundController');
 const auth = require('./middlewares/auth');
+const { REGEX, SERVER_ERROR_CODE } = require('./utils/constants');
 
 const { PORT = 3000 } = process.env;
 
@@ -26,16 +26,16 @@ mongoose.connect('mongodb://localhost:27017/mestodb');
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(6),
+    password: Joi.string().required(),
   }),
 }), login);
 app.post('/signup', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(6),
+    password: Joi.string().required(),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().regex(/^(https?:\/\/)(w{3}\.)?([\w\-._~:/?#[\]@!$&'()*+,;=]+)(#?)$/),
+    avatar: Joi.string().regex(REGEX),
   }),
 }), createUser);
 
@@ -49,10 +49,10 @@ app.use(errors());
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
+  const { statusCode = SERVER_ERROR_CODE, message } = err;
   res
     .status(statusCode)
-    .send({ message: statusCode === 500 ? 'На сервере произошла ошибка' : message });
+    .send({ message: statusCode === SERVER_ERROR_CODE ? 'На сервере произошла ошибка' : message });
 });
 
 app.listen(PORT, () => {

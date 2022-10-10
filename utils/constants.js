@@ -4,6 +4,7 @@ const FORBIDDEN = 403;
 const NOT_FOUND_CODE = 404;
 const CONFLICT_CODE = 409;
 const SERVER_ERROR_CODE = 500;
+const REGEX = /^(https?:\/\/)(w{3}\.)?([\w\-._~:/?#[\]@!$&'()*+,;=]+)(#?)$/;
 
 module.exports = {
   BAD_REQUEST_CODE,
@@ -12,4 +13,5 @@ module.exports = {
   UNAUTHORIZED,
   FORBIDDEN,
   CONFLICT_CODE,
+  REGEX,
 };
