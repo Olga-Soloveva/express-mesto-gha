@@ -37,7 +37,7 @@ module.exports.deleteCard = (req, res, next) => {
         next(new ForbiddenError('Нет прав на удаление карточек других пользователей'));
         return;
       }
-      res.send(card);
+      return card;
     })
     .then((card) => {
       Card.findByIdAndRemove(card.id)
