@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { celebrate, errors, Joi } = require('celebrate');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { login, createUser } = require('./controllers/users');
 
@@ -22,6 +23,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
+
+app.use(requestLogger);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -44,6 +47,8 @@ app.use(auth);
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
 app.use('*', notFoundController);
+
+app.use(errorLogger);
 
 app.use(errors());
 
