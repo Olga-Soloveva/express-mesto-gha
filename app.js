@@ -13,6 +13,7 @@ const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const { notFoundController } = require('./controllers/notFoundController');
 const auth = require('./middlewares/auth');
+const cors = require('./middlewares/cors');
 const { REGEX, SERVER_ERROR_CODE } = require('./utils/constants');
 
 const { PORT = 3000 } = process.env;
@@ -27,6 +28,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
 app.use(requestLogger);
+
+app.use(cors);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
