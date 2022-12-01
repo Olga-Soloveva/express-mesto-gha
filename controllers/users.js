@@ -30,7 +30,6 @@ module.exports.login = (req, res, next) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key');
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
-        httpOnly: true,
       });
       return res.send({ message: 'Авторизация прошла успешно' });
     })
@@ -87,6 +86,10 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => {
       // eslint-disable-next-line no-param-reassign
       user.password = undefined;
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key');
+      res.cookie('jwt', token, {
+        maxAge: 3600000 * 24 * 7,
+      });
       res.send(user);
     })
     .catch((err) => {

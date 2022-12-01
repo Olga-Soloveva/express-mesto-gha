@@ -1,7 +1,8 @@
 const allowedCors = [
   'https://olgatovstaya.mesto.nomoredomains.club',
   'http://olgatovstaya.mesto.nomoredomains.club',
-  'localhost:3000',
+  'http://localhost:3000',
+  'http://localhost:3001',
 ];
 
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
