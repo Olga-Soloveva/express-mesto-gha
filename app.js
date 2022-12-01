@@ -13,27 +13,26 @@ const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const { notFoundController } = require('./controllers/notFoundController');
 const auth = require('./middlewares/auth');
-// const cors = require('./middlewares/cors');
+const cors = require('./middlewares/cors');
 const { REGEX, SERVER_ERROR_CODE } = require('./utils/constants');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://olgatovstaya.mesto.nomoredomains.club');
-  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, PUTCH DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+// app.use((req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', 'https://olgatovstaya.mesto.nomoredomains.club');
+//   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, PUTCH DELETE, OPTIONS');
+//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
 
-  if (req.method === 'OPTIONS') {
-    res.send(200);
-  } else {
-    next();
-  }
-});
+//   if (req.method === 'OPTIONS') {
+//     res.send(200);
+//   } else {
+//     next();
+//   }
+// });
 
-
-// app.use(cors);
+app.use(cors());
 
 // const allowedCors = [
 //   'https://olgatovstaya.mesto.nomoredomains.club',
