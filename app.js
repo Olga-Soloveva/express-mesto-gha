@@ -21,6 +21,8 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
+app.use(cors());
+
 app.use(cookieParser());
 
 app.use(bodyParser.json());
@@ -30,23 +32,23 @@ mongoose.connect('mongodb://localhost:27017/mestodb');
 
 app.use(requestLogger);
 
-const allowedCors = [
-  'https://olgatovstaya.mesto.nomoredomains.club',
-  'http://olgatovstaya.mesto.nomoredomains.club',
-  'localhost:3000',
-];
+// const allowedCors = [
+//   'https://olgatovstaya.mesto.nomoredomains.club',
+//   'http://olgatovstaya.mesto.nomoredomains.club',
+//   'localhost:3000',
+// ];
 
-const corsOptions = {
-  origin(origin, callback) {
-    if (allowedCors.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-};
+// const corsOptions = {
+//   origin(origin, callback) {
+//     if (allowedCors.indexOf(origin) !== -1 || !origin) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 // app.use((req, res, next) => {
 //   res.header('Access-Control-Allow-Origin', '*');
