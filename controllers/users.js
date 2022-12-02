@@ -32,7 +32,7 @@ module.exports.login = (req, res, next) => {
         maxAge: 3600000 * 24 * 7,
         sameSite: 'none',
         secure: true,
-        domain: 'api.olgatovstaya.mesto.nomoredomains.club',
+        domain: 'olgatovstaya.mesto.nomoredomains.club',
       });
       return res.send({ message: 'Авторизация прошла успешно' });
     })
@@ -94,7 +94,7 @@ module.exports.createUser = (req, res, next) => {
         maxAge: 3600000 * 24 * 7,
         sameSite: 'none',
         secure: true,
-        domain: 'api.olgatovstaya.mesto.nomoredomains.club',
+        domain: 'olgatovstaya.mesto.nomoredomains.club',
       });
       res.send(user);
     })
