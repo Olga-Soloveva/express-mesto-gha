@@ -28,12 +28,7 @@ module.exports.login = (req, res, next) => {
     })
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key');
-      res.cookie('jwt', token, {
-        maxAge: 3600000 * 24 * 7,
-        sameSite: 'none',
-        secure: true,
-      });
-      return res.send({ message: 'Авторизация прошла успешно' });
+      return res.send({ token, message: 'Авторизация прошла успешно' });
     })
     .catch(next);
 };
@@ -89,12 +84,7 @@ module.exports.createUser = (req, res, next) => {
       // eslint-disable-next-line no-param-reassign
       user.password = undefined;
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key');
-      res.cookie('jwt', token, {
-        maxAge: 3600000 * 24 * 7,
-        sameSite: 'none',
-        secure: true,
-      });
-      res.send(user);
+      res.send({ token, user });
     })
     .catch((err) => {
       if (err.code === 11000) {
