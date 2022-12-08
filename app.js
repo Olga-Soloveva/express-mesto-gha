@@ -18,7 +18,9 @@ const app = express();
 
 app.use(cors);
 app.use(cookieParser());
-app.use(helmet());
+app.use(helmet({
+  referrerPolicy: { policy: 'no-referrer' },
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
