@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 const express = require('express');
-const helmet = require('helmet');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -18,9 +17,6 @@ const app = express();
 
 app.use(cors);
 app.use(cookieParser());
-app.use(helmet({
-  referrerPolicy: { policy: 'no-referrer' },
-}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
